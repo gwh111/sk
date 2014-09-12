@@ -25,6 +25,7 @@
                                        CGRectGetMidY(self.frame));
         
         [self addChild:myLabel];
+        NSLog(@"%d",arc4random());
     }
     return self;
 }
@@ -53,7 +54,6 @@
         
         [self addChild:sprite];
     }
-    
     
 }
 

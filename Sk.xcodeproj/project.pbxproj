@@ -25,6 +25,7 @@
 		184D5A9E19C170EC005840CB /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 184D5A9C19C170EC005840CB /* InfoPlist.strings */; };
 		184D5AA019C170EC005840CB /* SkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 184D5A9F19C170EC005840CB /* SkTests.m */; };
 		184D5AAB19C171D3005840CB /* SpaceshipScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 184D5AAA19C171D3005840CB /* SpaceshipScene.m */; };
+		1878C35B19C2D864000E2036 /* GameOverScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 1878C35A19C2D864000E2036 /* GameOverScene.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +64,8 @@
 		184D5A9F19C170EC005840CB /* SkTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SkTests.m; sourceTree = "<group>"; };
 		184D5AA919C171D3005840CB /* SpaceshipScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpaceshipScene.h; sourceTree = "<group>"; };
 		184D5AAA19C171D3005840CB /* SpaceshipScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpaceshipScene.m; sourceTree = "<group>"; };
+		1878C35919C2D864000E2036 /* GameOverScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameOverScene.h; sourceTree = "<group>"; };
+		1878C35A19C2D864000E2036 /* GameOverScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameOverScene.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -134,6 +137,8 @@
 				184D5A8A19C170EC005840CB /* Spaceship.png */,
 				184D5AA919C171D3005840CB /* SpaceshipScene.h */,
 				184D5AAA19C171D3005840CB /* SpaceshipScene.m */,
+				1878C35919C2D864000E2036 /* GameOverScene.h */,
+				1878C35A19C2D864000E2036 /* GameOverScene.m */,
 				184D5A8C19C170EC005840CB /* Images.xcassets */,
 				184D5A7619C170EC005840CB /* Supporting Files */,
 			);
@@ -271,6 +276,7 @@
 				184D5A8619C170EC005840CB /* ViewController.m in Sources */,
 				184D5AAB19C171D3005840CB /* SpaceshipScene.m in Sources */,
 				184D5A8019C170EC005840CB /* AppDelegate.m in Sources */,
+				1878C35B19C2D864000E2036 /* GameOverScene.m in Sources */,
 				184D5A7C19C170EC005840CB /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -478,6 +484,7 @@
 				184D5AA519C170EC005840CB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		184D5AA619C170EC005840CB /* Build configuration list for PBXNativeTarget "SkTests" */ = {
 			isa = XCConfigurationList;
@@ -486,6 +493,7 @@
 				184D5AA819C170EC005840CB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

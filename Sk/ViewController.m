@@ -26,6 +26,12 @@
     
     // Present the scene.
     [skView presentScene:scene];
+    
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"BEST"]==nil) {
+        
+        [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"0"] forKey:@"BEST"];
+        
+    }
 }
 
 - (BOOL)shouldAutorotate
