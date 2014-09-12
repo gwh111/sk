@@ -24,6 +24,7 @@
 		184D5A9619C170EC005840CB /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 184D5A7119C170EC005840CB /* UIKit.framework */; };
 		184D5A9E19C170EC005840CB /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 184D5A9C19C170EC005840CB /* InfoPlist.strings */; };
 		184D5AA019C170EC005840CB /* SkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 184D5A9F19C170EC005840CB /* SkTests.m */; };
+		184D5AAB19C171D3005840CB /* SpaceshipScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 184D5AAA19C171D3005840CB /* SpaceshipScene.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,6 +61,8 @@
 		184D5A9B19C170EC005840CB /* SkTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SkTests-Info.plist"; sourceTree = "<group>"; };
 		184D5A9D19C170EC005840CB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		184D5A9F19C170EC005840CB /* SkTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SkTests.m; sourceTree = "<group>"; };
+		184D5AA919C171D3005840CB /* SpaceshipScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpaceshipScene.h; sourceTree = "<group>"; };
+		184D5AAA19C171D3005840CB /* SpaceshipScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpaceshipScene.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,6 +132,8 @@
 				184D5A8719C170EC005840CB /* MyScene.h */,
 				184D5A8819C170EC005840CB /* MyScene.m */,
 				184D5A8A19C170EC005840CB /* Spaceship.png */,
+				184D5AA919C171D3005840CB /* SpaceshipScene.h */,
+				184D5AAA19C171D3005840CB /* SpaceshipScene.m */,
 				184D5A8C19C170EC005840CB /* Images.xcassets */,
 				184D5A7619C170EC005840CB /* Supporting Files */,
 			);
@@ -264,6 +269,7 @@
 			files = (
 				184D5A8919C170EC005840CB /* MyScene.m in Sources */,
 				184D5A8619C170EC005840CB /* ViewController.m in Sources */,
+				184D5AAB19C171D3005840CB /* SpaceshipScene.m in Sources */,
 				184D5A8019C170EC005840CB /* AppDelegate.m in Sources */,
 				184D5A7C19C170EC005840CB /* main.m in Sources */,
 			);

@@ -7,6 +7,7 @@
 //
 
 #import "MyScene.h"
+#import "SpaceshipScene.h"
 
 @implementation MyScene
 
@@ -28,8 +29,16 @@
     return self;
 }
 
+- (void)didMoveToView:(SKView *)view{
+    
+}
+
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     /* Called when a touch begins */
+    
+    SKScene *spaceshipScene=[[SpaceshipScene alloc]initWithSize:self.size];
+    SKTransition *doors=[SKTransition doorsOpenVerticalWithDuration:0.5];
+    [self.view presentScene:spaceshipScene transition:doors];
     
     for (UITouch *touch in touches) {
         CGPoint location = [touch locationInNode:self];
@@ -44,6 +53,8 @@
         
         [self addChild:sprite];
     }
+    
+    
 }
 
 -(void)update:(CFTimeInterval)currentTime {
