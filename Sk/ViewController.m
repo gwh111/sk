@@ -10,7 +10,7 @@
 #import "MyScene.h"
 
 @implementation ViewController
-
+int o;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
