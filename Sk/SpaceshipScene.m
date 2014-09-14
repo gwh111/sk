@@ -8,6 +8,7 @@
 
 #import "SpaceshipScene.h"
 #import "GameOverScene.h"
+#import "MyScene.h"
 
 static const uint32_t hullCategory     =  0x1 << 0;
 static const uint32_t rockCategory        =  0x1 << 1;
@@ -25,6 +26,16 @@ float gameStartTime;
 int gameCombo=0;
 SKSpriteNode *gameOverView;
 UIButton *retryButton;
+UIButton *backButton;
+
+SKAction *heroAction;
+SKAction *heroMoveRightAction;
+SKAction *heroMoveLeftAction;
+SKAction *heroHappyAction;
+
+float lastLocationX;
+bool isHappyMark=0;
+bool isPaused=0;
 
 - (void)didMoveToView:(SKView *)view{
     if (!self.contentCreated) {
@@ -33,13 +44,15 @@ UIButton *retryButton;
         self.physicsWorld.contactDelegate=self;
         self.physicsWorld.gravity = CGVectorMake(0,-0.8);
         self.scaleMode=SKSceneScaleModeAspectFit;
+        
     }
 }
 
 - (void)createSceneContents{
     
-    self.backgroundColor=[SKColor blackColor];
+    self.backgroundColor=[SKColor colorWithRed:1 green:243/255.f blue:146/255.f alpha:1];
     self.scaleMode=SKSceneScaleModeAspectFit;
+    lastLocationX=self.view.frame.size.width/2;
     
     SKSpriteNode *spaceship=[self newSpaceship];
     spaceship.position=CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame)-150);
@@ -66,7 +79,7 @@ UIButton *retryButton;
     
     SKAction *makeGroup=    [SKAction group:@[
                                                 [SKAction repeatAction:makeRocks_3 count:30],
-                                                [SKAction repeatAction:makeBigRocks count:10]]];
+                                                [SKAction repeatAction:makeBigRocks count:9]]];
     SKAction *makeGroup_2=  [SKAction group:@[
                                                 [SKAction repeatAction:makeRocks_4 count:60],
                                                 [SKAction repeatAction:makeBigRocks count:12],
@@ -84,6 +97,7 @@ UIButton *retryButton;
     timeLabel.fontSize=18;
     timeLabel.position=CGPointMake(20,self.frame.size.height-30);
     timeLabel.horizontalAlignmentMode=SKLabelHorizontalAlignmentModeLeft;
+    timeLabel.fontColor=[SKColor blackColor];
     [self addChild:timeLabel];
     
     bestLabel=[SKLabelNode labelNodeWithFontNamed:@"Chalkduster"];
@@ -91,12 +105,142 @@ UIButton *retryButton;
     bestLabel.fontSize=18;
     bestLabel.position=CGPointMake(self.frame.size.width-100,self.frame.size.height-30);
     bestLabel.horizontalAlignmentMode=SKLabelHorizontalAlignmentModeLeft;
+    bestLabel.fontColor=[SKColor blackColor];
     [self addChild:bestLabel];
+    
+    SKTextureAtlas *atlas = [SKTextureAtlas atlasNamed:@"mm_right"];
+    SKTexture *temp1 = [atlas textureNamed:@"mm_right1.png"];
+    SKTexture *temp2 = [atlas textureNamed:@"mm_right2.png"];
+    SKTexture *temp3 = [atlas textureNamed:@"mm_right3.png"];
+    SKTexture *temp4 = [atlas textureNamed:@"mm_right4.png"];
+    SKTexture *temp5 = [atlas textureNamed:@"mm_right5.png"];
+    SKTexture *temp6 = [atlas textureNamed:@"mm_right6.png"];
+    SKTexture *temp7 = [atlas textureNamed:@"mm_right7.png"];
+    SKTexture *temp8 = [atlas textureNamed:@"mm_right8.png"];
+    SKTexture *temp9 = [atlas textureNamed:@"mm_right9.png"];
+    SKTexture *temp10 = [atlas textureNamed:@"mm_right10.png"];
+    SKTexture *temp11 = [atlas textureNamed:@"mm_right11.png"];
+    SKTexture *temp12;
+    SKTexture *temp13;
+    SKTexture *temp14;
+    SKTexture *temp15;
+    SKTexture *temp16;
+    SKTexture *temp17;
+    SKTexture *temp18;
+    SKTexture *temp19;
+    SKTexture *temp20;
+    SKTexture *temp21;
+    SKTexture *temp22;
+    SKTexture *temp23;
+    SKTexture *temp24;
+    SKTexture *temp25;
+    SKTexture *temp26;
+    SKTexture *temp27;
+    SKTexture *temp28;
+    SKTexture *temp29;
+    SKTexture *temp30;
+    SKTexture *temp31;
+    SKTexture *temp32;
+    SKTexture *temp33;
+    SKTexture *temp34;
+    SKTexture *temp35;
+    SKTexture *temp36;
+    SKTexture *temp37;
+    NSArray *heroArray=@[temp1,temp2,temp3,temp4,temp5,temp6,temp7,temp8,temp9,temp10,temp11];
+    heroMoveRightAction=[SKAction animateWithTextures:heroArray timePerFrame:0.07];
+    
+    atlas = [SKTextureAtlas atlasNamed:@"mm_left"];
+    temp1 = [atlas textureNamed:@"mm_left1.png"];
+    temp2 = [atlas textureNamed:@"mm_left2.png"];
+    temp3 = [atlas textureNamed:@"mm_left3.png"];
+    temp4 = [atlas textureNamed:@"mm_left4.png"];
+    temp5 = [atlas textureNamed:@"mm_left5.png"];
+    temp6 = [atlas textureNamed:@"mm_left6.png"];
+    temp7 = [atlas textureNamed:@"mm_left7.png"];
+    temp8 = [atlas textureNamed:@"mm_left8.png"];
+    temp9 = [atlas textureNamed:@"mm_left9.png"];
+    temp10 = [atlas textureNamed:@"mm_left10.png"];
+    temp11 = [atlas textureNamed:@"mm_left11.png"];
+    heroArray=@[temp1,temp2,temp3,temp4,temp5,temp6,temp7,temp8,temp9,temp10,temp11];
+    heroMoveLeftAction=[SKAction animateWithTextures:heroArray timePerFrame:0.07];
+    
+    atlas = [SKTextureAtlas atlasNamed:@"mm_happy"];
+    temp1 = [atlas textureNamed:@"mm_happy1.png"];
+    temp2 = [atlas textureNamed:@"mm_happy2.png"];
+    temp3 = [atlas textureNamed:@"mm_happy3.png"];
+    temp4 = [atlas textureNamed:@"mm_happy4.png"];
+    temp5 = [atlas textureNamed:@"mm_happy5.png"];
+    temp6 = [atlas textureNamed:@"mm_happy6.png"];
+    temp7 = [atlas textureNamed:@"mm_happy7.png"];
+    temp8 = [atlas textureNamed:@"mm_happy8.png"];
+    temp9 = [atlas textureNamed:@"mm_happy9.png"];
+    temp10 = [atlas textureNamed:@"mm_happy10.png"];
+    temp11 = [atlas textureNamed:@"mm_happy11.png"];
+    temp12 = [atlas textureNamed:@"mm_happy12.png"];
+    temp13 = [atlas textureNamed:@"mm_happy13.png"];
+    temp14 = [atlas textureNamed:@"mm_happy14.png"];
+    temp15 = [atlas textureNamed:@"mm_happy15.png"];
+    temp16 = [atlas textureNamed:@"mm_happy16.png"];
+    temp17 = [atlas textureNamed:@"mm_happy17.png"];
+    temp18 = [atlas textureNamed:@"mm_happy18.png"];
+    temp19 = [atlas textureNamed:@"mm_happy19.png"];
+    temp20 = [atlas textureNamed:@"mm_happy20.png"];
+    temp21 = [atlas textureNamed:@"mm_happy21.png"];
+    temp22 = [atlas textureNamed:@"mm_happy22.png"];
+    temp23 = [atlas textureNamed:@"mm_happy23.png"];
+    temp24 = [atlas textureNamed:@"mm_happy24.png"];
+    temp25 = [atlas textureNamed:@"mm_happy25.png"];
+    temp26 = [atlas textureNamed:@"mm_happy26.png"];
+    temp27 = [atlas textureNamed:@"mm_happy27.png"];
+    temp28 = [atlas textureNamed:@"mm_happy28.png"];
+    temp29 = [atlas textureNamed:@"mm_happy29.png"];
+    temp30 = [atlas textureNamed:@"mm_happy30.png"];
+    temp31 = [atlas textureNamed:@"mm_happy31.png"];
+    temp32 = [atlas textureNamed:@"mm_happy32.png"];
+    temp33 = [atlas textureNamed:@"mm_happy33.png"];
+    temp34 = [atlas textureNamed:@"mm_happy34.png"];
+    temp35 = [atlas textureNamed:@"mm_happy35.png"];
+    temp36 = [atlas textureNamed:@"mm_happy36.png"];
+    temp37 = [atlas textureNamed:@"mm_happy37.png"];
+    heroArray=@[temp1,temp2,temp3,temp4,temp5,temp6,temp7,temp8,temp9,temp10,temp11,temp12,temp13,temp14,temp15,temp16,temp17,temp18,temp19,temp20,temp21,temp22,temp23,temp24,temp25,temp26,temp27,temp28,temp29,temp30,temp31,temp32,temp33,temp34,temp35,temp36,temp37];
+    heroHappyAction=[SKAction animateWithTextures:heroArray timePerFrame:0.04];
+    
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(pause:) name:@"pause" object:nil];
+
 }
 
 - (SKSpriteNode*)newSpaceship{
-    hull=[[SKSpriteNode alloc]initWithColor:[SKColor grayColor] size:CGSizeMake(40, 32)];
+    hull=[[SKSpriteNode alloc]initWithColor:[SKColor grayColor] size:CGSizeMake(50, 50)];
     hull.name=@"hero";
+    
+    SKTextureAtlas *atlas = [SKTextureAtlas atlasNamed:@"mm"];
+    SKTexture *temp1 = [atlas textureNamed:@"mm1.png"];
+    SKTexture *temp2 = [atlas textureNamed:@"mm2.png"];
+    SKTexture *temp3 = [atlas textureNamed:@"mm3.png"];
+    SKTexture *temp4 = [atlas textureNamed:@"mm4.png"];
+    SKTexture *temp5 = [atlas textureNamed:@"mm5.png"];
+    SKTexture *temp6 = [atlas textureNamed:@"mm6.png"];
+    SKTexture *temp7 = [atlas textureNamed:@"mm7.png"];
+    SKTexture *temp8 = [atlas textureNamed:@"mm8.png"];
+    SKTexture *temp9 = [atlas textureNamed:@"mm9.png"];
+    SKTexture *temp10 = [atlas textureNamed:@"mm10.png"];
+    SKTexture *temp11 = [atlas textureNamed:@"mm11.png"];
+    SKTexture *temp12 = [atlas textureNamed:@"mm12.png"];
+    SKTexture *temp13 = [atlas textureNamed:@"mm13.png"];
+    SKTexture *temp14 = [atlas textureNamed:@"mm14.png"];
+    SKTexture *temp15 = [atlas textureNamed:@"mm15.png"];
+    SKTexture *temp16 = [atlas textureNamed:@"mm16.png"];
+    SKTexture *temp17 = [atlas textureNamed:@"mm17.png"];
+    SKTexture *temp18 = [atlas textureNamed:@"mm18.png"];
+    SKTexture *temp19 = [atlas textureNamed:@"mm19.png"];
+    SKTexture *temp20 = [atlas textureNamed:@"mm20.png"];
+    SKTexture *temp21 = [atlas textureNamed:@"mm21.png"];
+    SKTexture *temp22 = [atlas textureNamed:@"mm22.png"];
+    SKTexture *temp23 = [atlas textureNamed:@"mm23.png"];
+    SKTexture *temp24 = [atlas textureNamed:@"mm24.png"];
+    NSArray *heroArray=@[temp1,temp2,temp3,temp4,temp5,temp6,temp7,temp8,temp9,temp10,temp11,temp12,temp13,temp14,temp15,temp16,temp17,temp18,temp19,temp20,temp21,temp22,temp23,temp24];
+    heroAction=[SKAction animateWithTextures:heroArray timePerFrame:0.05];
+    [hull runAction:[SKAction repeatActionForever:heroAction]];
     
     SKAction *hover=[SKAction sequence:@[
                                          [SKAction waitForDuration:1.0],
@@ -142,7 +286,7 @@ static inline CGFloat skRand(CGFloat low, CGFloat high) {
 
 - (void)addRock{
     self.physicsWorld.contactDelegate=self;
-    SKSpriteNode *rock=[[SKSpriteNode alloc]initWithColor:[SKColor brownColor] size:CGSizeMake(8, 8)];
+    SKSpriteNode *rock=[[SKSpriteNode alloc]initWithColor:[SKColor brownColor] size:CGSizeMake(12, 30)];
     rock.position=CGPointMake(skRand(0, self.size.width), self.size.height-50);
     rock.name=@"rock";
     rock.physicsBody=[SKPhysicsBody bodyWithRectangleOfSize:rock.size];
@@ -150,10 +294,11 @@ static inline CGFloat skRand(CGFloat low, CGFloat high) {
     rock.physicsBody.categoryBitMask = rockCategory;
     rock.physicsBody.contactTestBitMask = hullCategory;
     [self addChild:rock];
+    rock.texture=[SKTexture textureWithImageNamed:@"arrow.png"];
 }
 - (void)addBigRock{
     self.physicsWorld.contactDelegate=self;
-    SKSpriteNode *rock=[[SKSpriteNode alloc]initWithColor:[SKColor darkGrayColor] size:CGSizeMake(20, 20)];
+    SKSpriteNode *rock=[[SKSpriteNode alloc]initWithColor:[SKColor darkGrayColor] size:CGSizeMake(35, 35)];
     rock.position=CGPointMake(skRand(0, self.size.width), self.size.height-50);
     rock.name=@"bigRock";
     rock.physicsBody=[SKPhysicsBody bodyWithRectangleOfSize:rock.size];
@@ -161,10 +306,11 @@ static inline CGFloat skRand(CGFloat low, CGFloat high) {
     rock.physicsBody.categoryBitMask = rockCategory;
     rock.physicsBody.contactTestBitMask = hullCategory;
     [self addChild:rock];
+    rock.texture=[SKTexture textureWithImageNamed:@"bomb.png"];
 }
 - (void)addEnemy{
     self.physicsWorld.contactDelegate=self;
-    SKSpriteNode *rock=[[SKSpriteNode alloc]initWithColor:[SKColor greenColor] size:CGSizeMake(10, 10)];
+    SKSpriteNode *rock=[[SKSpriteNode alloc]initWithColor:[SKColor greenColor] size:CGSizeMake(30, 30)];
     rock.position=CGPointMake(skRand(0, self.size.width), self.size.height-50);
     rock.name=@"enemy";
     rock.physicsBody=[SKPhysicsBody bodyWithRectangleOfSize:rock.size];
@@ -172,6 +318,7 @@ static inline CGFloat skRand(CGFloat low, CGFloat high) {
     rock.physicsBody.categoryBitMask = enemyCategory;
     rock.physicsBody.contactTestBitMask = hullCategory;
     [self addChild:rock];
+    rock.texture=[SKTexture textureWithImageNamed:@"apple.png"];
 }
 - (void)didSimulatePhysics{
     [self enumerateChildNodesWithName:@"rock" usingBlock:^(SKNode *node, BOOL *stop){
@@ -207,17 +354,18 @@ static inline CGFloat skRand(CGFloat low, CGFloat high) {
     if (firstBody.categoryBitMask==hullCategory&secondBody.categoryBitMask==rockCategory) {
         
         if (isEnd==1) {
-            
+            SKAction *pluseRed=[SKAction sequence:@[
+                                                    [SKAction colorizeWithColor:[SKColor redColor] colorBlendFactor:0.5 duration:0.2],
+                                                    [SKAction waitForDuration:0.1]]];
+            [hull runAction:pluseRed];
         }else{
             [secondBody.node removeFromParent];
             SKAction *pluseRed=[SKAction sequence:@[
                                                     [SKAction colorizeWithColor:[SKColor redColor] colorBlendFactor:0.5 duration:0.2],
-                                                    [SKAction waitForDuration:0.1],
-                                                    [SKAction colorizeWithColor:[SKColor grayColor] colorBlendFactor:0.5 duration:0.2],
-                                                    [SKAction colorizeWithColorBlendFactor:0.0 duration:0.2]]];
+                                                    [SKAction waitForDuration:0.1]]];
             [hull runAction:pluseRed];
             isEnd=1;
-            
+            hull.size=CGSizeMake(50, 50);
             [self gameOver];
         }
         
@@ -233,11 +381,22 @@ static inline CGFloat skRand(CGFloat low, CGFloat high) {
             myLabel.fontSize = 30;
             myLabel.position = CGPointMake(CGRectGetMidX(self.frame),
                                            CGRectGetMidY(self.frame));
+            myLabel.fontColor=[SKColor blackColor];
             
             [self addChild:myLabel];
             
             SKAction *fadeAction=[SKAction fadeAlphaTo:0 duration:1];
             [myLabel runAction:fadeAction];
+            
+            isHappyMark=1;
+            [hull removeAllActions];
+            hull.size=CGSizeMake(50, 66);
+            [hull runAction:heroHappyAction completion:^{
+                NSLog(@"hullcom");
+                hull.size=CGSizeMake(50, 50);
+                [hull runAction:heroAction];
+                isHappyMark=0;
+            }];
         }
 
         if (gameCombo==5) {
@@ -251,34 +410,67 @@ static inline CGFloat skRand(CGFloat low, CGFloat high) {
 }
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
     if (isEnd==1) {
-        
+        lastLocationX=self.view.frame.size.width/2;
+    }else if (isHappyMark==1){
+        for (UITouch *touch in touches) {
+            CGPoint location = [touch locationInNode:self];
+            SKAction *moveto = [SKAction moveTo:location duration:0.8];
+            [hull runAction:moveto withKey:@"touchMove"];
+        }
     }else{
         for (UITouch *touch in touches) {
             CGPoint location = [touch locationInNode:self];
-            SKAction *moveto = [SKAction moveTo:location duration:0.5];
+            SKAction *moveto = [SKAction moveTo:location duration:0.8];
+            [hull removeAllActions];
             [hull runAction:moveto withKey:@"touchMove"];
+            
+            if (location.x>lastLocationX) {
+                [hull runAction:heroMoveRightAction completion:^{
+                    [hull runAction:[SKAction repeatActionForever:heroAction]];
+                }];
+            }else{
+                [hull runAction:heroMoveLeftAction completion:^{
+                    [hull runAction:[SKAction repeatActionForever:heroAction]];
+                }];
+            }
+            lastLocationX=location.x;
+            NSLog(@"%f",location.x);
         }
     }
 }
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event{
-    if (isEnd==1) {
-        
-    }else{
-        for (UITouch *touch in touches) {
-            CGPoint location = [touch locationInNode:self];
-            SKAction *moveto = [SKAction moveTo:location duration:0.6];
-            [hull runAction:moveto withKey:@"touchMove"];
-        }
-    }
+//    if (isEnd==1) {
+//        
+//    }else{
+//        for (UITouch *touch in touches) {
+//            CGPoint location = [touch locationInNode:self];
+//            SKAction *moveto = [SKAction moveTo:location duration:0.6];
+//            [hull runAction:moveto withKey:@"touchMove"];
+//        }
+//    }
 }
 
 -(void)update:(CFTimeInterval)currentTime{
+    NSLog(@"update");
     if (isEnd==1) {
+        
+    }else if (isPaused==1){
+        isPaused=0;
+        gameStartTime=currentTime-gameTime;
+        
+//        [retryButton removeFromSuperview];
+//        [backButton removeFromSuperview];
+//        
+//        SKScene *spaceshipScene=[[MyScene alloc]initWithSize:self.size];
+//        SKTransition *doors=[SKTransition doorsCloseVerticalWithDuration:0.5];
+//        [self.view presentScene:spaceshipScene transition:doors];
+//        [[NSNotificationCenter defaultCenter] postNotificationName:@"nameHide"object:@"HideNo"];
         
     }else{
         if (isBegain==0) {
             isBegain=1;
             gameStartTime=currentTime;
+            
         }else{
             gameTime=currentTime-gameStartTime;
             timeLabel.text=[NSString stringWithFormat:@"Score:%d",gameTime];
@@ -300,24 +492,71 @@ static inline CGFloat skRand(CGFloat low, CGFloat high) {
     
     [self removeAllActions];
     
-    gameOverView=[[SKSpriteNode alloc]initWithColor:[SKColor colorWithRed:0 green:0 blue:0 alpha:0.8] size:CGSizeMake(self.view.bounds.size.width, self.view.bounds.size.height)];
+    [hull removeAllActions];
+    SKTextureAtlas *atlas = [SKTextureAtlas atlasNamed:@"mm_d"];
+    SKTexture *temp1 = [atlas textureNamed:@"mm_d1.png"];
+    SKTexture *temp2 = [atlas textureNamed:@"mm_d2.png"];
+    SKTexture *temp3 = [atlas textureNamed:@"mm_d3.png"];
+    SKTexture *temp4 = [atlas textureNamed:@"mm_d4.png"];
+    SKTexture *temp5 = [atlas textureNamed:@"mm_d5.png"];
+    SKTexture *temp6 = [atlas textureNamed:@"mm_d6.png"];
+    SKTexture *temp7 = [atlas textureNamed:@"mm_d7.png"];
+    SKTexture *temp8 = [atlas textureNamed:@"mm_d8.png"];
+    NSArray *heroArray=@[temp1,temp2,temp3,temp4,temp5,temp6,temp7,temp8];
+    SKAction *tempAction=[SKAction animateWithTextures:heroArray timePerFrame:0.1];
+    [hull runAction:[SKAction repeatActionForever:tempAction]];
+    
+    gameOverView=[[SKSpriteNode alloc]initWithColor:[SKColor colorWithRed:0 green:0 blue:0 alpha:0.8] size:CGSizeMake(320, 320)];
+    gameOverView.texture=[SKTexture textureWithImageNamed:@"gameover.png"];
     gameOverView.position=CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame));
     [self addChild:gameOverView];
+    SKAction *gameOverViewAction=[SKAction fadeAlphaBy:0 duration:1];
+    [gameOverView runAction:gameOverViewAction];
+    SKAction *gameOverViewAction2=[SKAction fadeAlphaBy:0 duration:1.5];
     
     SKLabelNode *gameOverLabel=[SKLabelNode labelNodeWithFontNamed:@"Chalkduster"];
     gameOverLabel.text=@"Your Score";
-    gameOverLabel.fontSize=30;
-    gameOverLabel.position=CGPointMake(0, 100);
+    gameOverLabel.fontSize=20;
+    gameOverLabel.position=CGPointMake(0, 50);
+    gameOverLabel.fontColor=[SKColor blackColor];
     [gameOverView addChild:gameOverLabel];
+    [gameOverLabel runAction:gameOverViewAction];
     
-    if (gameTime>[[[NSUserDefaults standardUserDefaults] objectForKey:@"BEST"]intValue]) {
+    SKLabelNode *scoreLabel=[SKLabelNode labelNodeWithFontNamed:@"Chalkduster"];
+    scoreLabel.text=[NSString stringWithFormat:@"%d",gameTime];
+    scoreLabel.fontSize=20;
+    scoreLabel.position=CGPointMake(0, 0);
+    scoreLabel.fontColor=[SKColor blackColor];
+    [gameOverView addChild:scoreLabel];
+    [scoreLabel runAction:gameOverViewAction];
+    
+    SKLabelNode *rewardLabel=[SKLabelNode labelNodeWithFontNamed:@"Chalkduster"];
+    rewardLabel.text=[NSString stringWithFormat:@"Combo Reward: %d",gameCombo*5];
+    rewardLabel.fontSize=14;
+    rewardLabel.position=CGPointMake(0, -50);
+    rewardLabel.fontColor=[SKColor purpleColor];
+    [gameOverView addChild:rewardLabel];
+    rewardLabel.alpha=0;
+    [gameOverView runAction:gameOverViewAction2 completion:^{
+        rewardLabel.alpha=1;
+        SKAction *fadeOutAction=[SKAction fadeOutWithDuration:0.3];
+        SKAction *fadeInAction=[SKAction fadeInWithDuration:0.3];
+        [scoreLabel runAction:fadeOutAction completion:^{
+          scoreLabel.text=[NSString stringWithFormat:@"%d",gameTime+gameCombo*5];
+            scoreLabel.fontColor=[SKColor redColor];
+            scoreLabel.fontSize=30;
+            [scoreLabel runAction:fadeInAction];
+        }];
+    }];
+    
+    if (gameTime+5*gameCombo>[[[NSUserDefaults standardUserDefaults] objectForKey:@"BEST"]intValue]) {
         NSLog(@"newRecord");
         
         SKLabelNode *newLabel = [SKLabelNode labelNodeWithFontNamed:@"Chalkduster"];
         newLabel.text = @"New Record~";
-        newLabel.fontSize = 20;
-        newLabel.position = CGPointMake(0,150);
-        newLabel.color=[SKColor redColor];
+        newLabel.fontSize = 15;
+        newLabel.position = CGPointMake(0,75);
+        newLabel.fontColor=[SKColor redColor];
         
         SKAction *fadeAction=[SKAction sequence:@[
                                                   [SKAction fadeOutWithDuration:0.5],
@@ -325,13 +564,14 @@ static inline CGFloat skRand(CGFloat low, CGFloat high) {
         [newLabel runAction:[SKAction repeatActionForever:fadeAction]];
         [gameOverView addChild:newLabel];
         
-        [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%d",gameTime] forKey:@"BEST"];
+        [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%d",gameTime+5*gameCombo] forKey:@"BEST"];
     }
     
     
     retryButton=[UIButton buttonWithType:UIButtonTypeCustom];
-    retryButton.frame=CGRectMake(100, 400, 120, 50);
-    retryButton.backgroundColor=[UIColor whiteColor];
+    retryButton.frame=CGRectMake(135, 300, 50, 50);
+    [retryButton setBackgroundImage:[UIImage imageNamed:@"button.png"] forState:UIControlStateNormal];
+    [retryButton setBackgroundImage:[UIImage imageNamed:@"button_h.png"] forState:UIControlStateHighlighted];
     [self.view addSubview:retryButton];
     [retryButton addTarget:self action:@selector(retryButton) forControlEvents:UIControlEventTouchUpInside];
 
@@ -361,6 +601,31 @@ static inline CGFloat skRand(CGFloat low, CGFloat high) {
     gameCombo=0;
     self.physicsWorld.gravity = CGVectorMake(0,-1);
     [self createSceneContents];
+    
+    [retryButton removeFromSuperview];
+    [backButton removeFromSuperview];
+    SKScene *spaceshipScene=[[MyScene alloc]initWithSize:self.size];
+    SKTransition *doors=[SKTransition doorsCloseVerticalWithDuration:0.5];
+    [self.view presentScene:spaceshipScene transition:doors];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"nameHide"object:@"HideNo"];
+}
+- (void)backButton{
+    [retryButton removeFromSuperview];
+    [backButton removeFromSuperview];
+    SKScene *spaceshipScene=[[MyScene alloc]initWithSize:self.size];
+    SKTransition *doors=[SKTransition doorsCloseVerticalWithDuration:0.5];
+    [self.view presentScene:spaceshipScene transition:doors];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"nameHide"object:@"HideNo"];
+}
+
+- (void)pause:(NSNotification*)notification{
+    id obj = [notification object];
+    if ([obj isEqualToString:@"out"]){
+        NSLog(@"out");
+    }else if([obj isEqualToString:@"in"]){
+        NSLog(@"in");
+        isPaused=1;
+    }
 }
 
 @end
