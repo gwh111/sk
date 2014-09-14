@@ -10,11 +10,11 @@
 #import "MyScene.h"
 
 @implementation ViewController
-
+int al;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    al=1;
     // Configure the view.
     SKView * skView = (SKView *)self.view;
     skView.showsFPS = YES;
