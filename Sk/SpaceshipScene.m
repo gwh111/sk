@@ -38,6 +38,8 @@ bool isHappyMark=0;
 bool isPaused=0;
 
 int adCount=0;
+AVAudioPlayer *audioPlayer;
+AVAudioPlayer *audioPlayer1;
 
 - (void)didMoveToView:(SKView *)view{
     if (!self.contentCreated) {
@@ -88,7 +90,6 @@ int adCount=0;
                                                 [SKAction repeatAction:makeEnemy count:5]]];
     
     SKAction *rocksAllAction=[SKAction sequence:@[
-                                                  makeGroup_2,
                                                 [SKAction repeatAction:makeRocks count:6],
                                                 [SKAction repeatAction:makeRocks_2 count:10],
                                                 makeGroup,
@@ -209,7 +210,14 @@ int adCount=0;
     heroHappyAction=[SKAction animateWithTextures:heroArray timePerFrame:0.04];
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(pause:) name:@"pause" object:nil];
-       
+    
+    NSString *musicPath = [[NSBundle mainBundle] pathForResource:@"bgm_06"
+                                                          ofType:@"MP3"];
+    NSURL *musicURL = [NSURL fileURLWithPath:musicPath];
+    audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:musicURL
+                                                         error:nil];
+    [audioPlayer setDelegate:self];
+    [audioPlayer play];
 }
 
 - (SKSpriteNode*)newSpaceship{
@@ -369,6 +377,24 @@ static inline CGFloat skRand(CGFloat low, CGFloat high) {
             [hull runAction:pluseRed];
             isEnd=1;
             hull.size=CGSizeMake(50, 50);
+            
+            [audioPlayer stop];
+            
+            NSString *musicPath1 = [[NSBundle mainBundle] pathForResource:@"sound1"
+                                                                  ofType:@"MP3"];
+            NSURL *musicURL1 = [NSURL fileURLWithPath:musicPath1];
+            audioPlayer1 = [[AVAudioPlayer alloc] initWithContentsOfURL:musicURL1
+                                                                 error:nil];
+            [audioPlayer1 play];
+
+            NSString *musicPath = [[NSBundle mainBundle] pathForResource:@"bgm_09"
+                                                                  ofType:@"MP3"];
+            NSURL *musicURL = [NSURL fileURLWithPath:musicPath];
+            audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:musicURL
+                                                                 error:nil];
+            [audioPlayer setDelegate:self];
+            [audioPlayer play];
+            
             [self gameOver];
             
             adCount++;
@@ -386,6 +412,13 @@ static inline CGFloat skRand(CGFloat low, CGFloat high) {
         if (isEnd==1) {
             
         }else{
+            NSString *musicPath1 = [[NSBundle mainBundle] pathForResource:@"sound3"
+                                                                   ofType:@"MP3"];
+            NSURL *musicURL1 = [NSURL fileURLWithPath:musicPath1];
+            audioPlayer1 = [[AVAudioPlayer alloc] initWithContentsOfURL:musicURL1
+                                                                                 error:nil];
+            [audioPlayer1 play];
+            
             [secondBody.node removeFromParent];
             gameCombo++;
             SKLabelNode *myLabel = [SKLabelNode labelNodeWithFontNamed:@"Chalkduster"];
@@ -660,6 +693,15 @@ static inline CGFloat skRand(CGFloat low, CGFloat high) {
     [self.view presentScene:spaceshipScene transition:doors];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"nameHide"object:@"HideNo"];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"adShow"object:@"adHide"];
+    
+    [audioPlayer stop];
+    NSString *musicPath = [[NSBundle mainBundle] pathForResource:@"bgm_04"
+                                                          ofType:@"MP3"];
+    NSURL *musicURL = [NSURL fileURLWithPath:musicPath];
+    audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:musicURL
+                                                         error:nil];
+    [audioPlayer setDelegate:self];
+    [audioPlayer play];
 }
 //- (void)backButton{
 //    [retryButton removeFromSuperview];
@@ -678,6 +720,18 @@ static inline CGFloat skRand(CGFloat low, CGFloat high) {
         NSLog(@"in");
         isPaused=1;
     }
+}
+
+//播放完后
+- (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player
+                       successfully:(BOOL)flag{
+    [audioPlayer play];
+}
+
+//打断后回到
+- (void)audioPlayerEndInterruption:(AVAudioPlayer *)player{
+    [audioPlayer stop];
+    [audioPlayer play];
 }
 
 

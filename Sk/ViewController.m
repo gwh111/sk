@@ -51,9 +51,9 @@ GADInterstitial *bigBanner;
     banner.adUnitID = @"ca-app-pub-5564518885724507/6465984870";
     banner.rootViewController = self;
     [self.view addSubview:banner];
-    [banner loadRequest:[GADRequest request]];
-//    GADRequest *request;
-//    request.testDevices = @[ GAD_SIMULATOR_ID, @"MY_TEST_DEVICE_ID" ];
+    GADRequest *request;
+    request.testDevices = @[ GAD_SIMULATOR_ID, @"2ff21489bde489cefd176fe4da57f7cf" ];
+    [banner loadRequest:request];
     banner.delegate=self;
     banner.hidden=YES;
 }
@@ -79,7 +79,9 @@ GADInterstitial *bigBanner;
         NSLog(@"large");
         bigBanner=[[GADInterstitial alloc]init];
         bigBanner.adUnitID=@"ca-app-pub-5564518885724507/7663516475";
-        [bigBanner loadRequest:[GADRequest request]];
+        GADRequest *request;
+        request.testDevices = @[ GAD_SIMULATOR_ID, @"2ff21489bde489cefd176fe4da57f7cf" ];
+        [bigBanner loadRequest:request];
         bigBanner.delegate=self;
     }
 }

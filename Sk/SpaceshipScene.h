@@ -7,8 +7,9 @@
 //
 
 #import <SpriteKit/SpriteKit.h>
+#import <AVFoundation/AVFoundation.h>
 
-@interface SpaceshipScene : SKScene<SKPhysicsContactDelegate>
+@interface SpaceshipScene : SKScene<SKPhysicsContactDelegate,AVAudioPlayerDelegate>
 
 @property BOOL contentCreated;
 

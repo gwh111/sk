@@ -11,6 +11,8 @@
 
 @implementation MyScene
 
+AVAudioPlayer *audioPlayer;
+
 -(id)initWithSize:(CGSize)size {    
     if (self = [super initWithSize:size]) {
         /* Setup your scene here */
@@ -133,13 +135,13 @@
 }
 
 - (void)didMoveToView:(SKView *)view{
-//    NSString *musicPath = [[NSBundle mainBundle] pathForResource:@"之歌"
-//                                                          ofType:@"MP3"];
-//    NSURL *musicURL = [NSURL fileURLWithPath:musicPath];
-//    AVAudioPlayer *audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:musicURL
-//                                                        error:nil];
-//    [audioPlayer setDelegate:self];
-    
+    NSString *musicPath = [[NSBundle mainBundle] pathForResource:@"bgm_04"
+                                                          ofType:@"MP3"];
+    NSURL *musicURL = [NSURL fileURLWithPath:musicPath];
+    audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:musicURL
+                                                        error:nil];
+    [audioPlayer setDelegate:self];
+    [audioPlayer play];
     
 }
 
@@ -150,6 +152,7 @@
         SKPhysicsBody* body = [self.physicsWorld bodyAtPoint:touchLocation];
         if ([body.node.name isEqualToString:@"start"]){
             NSLog(@"go");
+            [audioPlayer stop];
             [[NSNotificationCenter defaultCenter] postNotificationName:@"nameHide"object:@"Hide"];
             
             SKScene *spaceshipScene=[[SpaceshipScene alloc]initWithSize:self.size];
@@ -166,7 +169,6 @@
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    NSLog(@"%d",buttonIndex);
     double version = [[UIDevice currentDevice].systemVersion doubleValue];
     if (buttonIndex==1) {
         if (version<7) {
@@ -183,5 +185,19 @@
 -(void)update:(CFTimeInterval)currentTime {
     /* Called before each frame is rendered */
 }
+
+//播放完后
+- (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player
+                       successfully:(BOOL)flag{
+    [audioPlayer play];
+}
+
+//打断后回到
+- (void)audioPlayerEndInterruption:(AVAudioPlayer *)player{
+    [audioPlayer stop];
+    [audioPlayer play];
+}
+
+
 
 @end
