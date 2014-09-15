@@ -37,6 +37,8 @@ float lastLocationX;
 bool isHappyMark=0;
 bool isPaused=0;
 
+int adCount=0;
+
 - (void)didMoveToView:(SKView *)view{
     if (!self.contentCreated) {
         [self createSceneContents];
@@ -86,6 +88,7 @@ bool isPaused=0;
                                                 [SKAction repeatAction:makeEnemy count:5]]];
     
     SKAction *rocksAllAction=[SKAction sequence:@[
+                                                  makeGroup_2,
                                                 [SKAction repeatAction:makeRocks count:6],
                                                 [SKAction repeatAction:makeRocks_2 count:10],
                                                 makeGroup,
@@ -206,7 +209,7 @@ bool isPaused=0;
     heroHappyAction=[SKAction animateWithTextures:heroArray timePerFrame:0.04];
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(pause:) name:@"pause" object:nil];
-
+       
 }
 
 - (SKSpriteNode*)newSpaceship{
@@ -239,7 +242,7 @@ bool isPaused=0;
     SKTexture *temp23 = [atlas textureNamed:@"mm23.png"];
     SKTexture *temp24 = [atlas textureNamed:@"mm24.png"];
     NSArray *heroArray=@[temp1,temp2,temp3,temp4,temp5,temp6,temp7,temp8,temp9,temp10,temp11,temp12,temp13,temp14,temp15,temp16,temp17,temp18,temp19,temp20,temp21,temp22,temp23,temp24];
-    heroAction=[SKAction animateWithTextures:heroArray timePerFrame:0.05];
+    heroAction=[SKAction animateWithTextures:heroArray timePerFrame:0.1];
     [hull runAction:[SKAction repeatActionForever:heroAction]];
     
     SKAction *hover=[SKAction sequence:@[
@@ -367,6 +370,15 @@ static inline CGFloat skRand(CGFloat low, CGFloat high) {
             isEnd=1;
             hull.size=CGSizeMake(50, 50);
             [self gameOver];
+            
+            adCount++;
+            if (adCount==5) {
+                adCount=0;
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"adShow"object:@"adLarge"];
+            }else{
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"adShow"object:@"adShow"];
+            }
+            
         }
         
     }else if (firstBody.categoryBitMask==hullCategory&secondBody.categoryBitMask==enemyCategory){
@@ -451,7 +463,7 @@ static inline CGFloat skRand(CGFloat low, CGFloat high) {
 }
 
 -(void)update:(CFTimeInterval)currentTime{
-    NSLog(@"update");
+//    NSLog(@"%d",adCount);
     if (isEnd==1) {
         
     }else if (isPaused==1){
@@ -504,7 +516,44 @@ static inline CGFloat skRand(CGFloat low, CGFloat high) {
     SKTexture *temp8 = [atlas textureNamed:@"mm_d8.png"];
     NSArray *heroArray=@[temp1,temp2,temp3,temp4,temp5,temp6,temp7,temp8];
     SKAction *tempAction=[SKAction animateWithTextures:heroArray timePerFrame:0.1];
-    [hull runAction:[SKAction repeatActionForever:tempAction]];
+    
+    SKTextureAtlas *atlas_2 = [SKTextureAtlas atlasNamed:@"death"];
+    SKTexture *temp1_2 = [atlas_2 textureNamed:@"death1.png"];
+    SKTexture *temp2_2 = [atlas_2 textureNamed:@"death2.png"];
+    SKTexture *temp3_2 = [atlas_2 textureNamed:@"death3.png"];
+    SKTexture *temp4_2 = [atlas_2 textureNamed:@"death4.png"];
+    SKTexture *temp5_2 = [atlas_2 textureNamed:@"death5.png"];
+    SKTexture *temp6_2 = [atlas_2 textureNamed:@"death6.png"];
+    SKTexture *temp7_2 = [atlas_2 textureNamed:@"death7.png"];
+    SKTexture *temp8_2 = [atlas_2 textureNamed:@"death8.png"];
+    SKTexture *temp9_2 = [atlas_2 textureNamed:@"death1.png"];
+    SKTexture *temp10_2 = [atlas_2 textureNamed:@"death2.png"];
+    SKTexture *temp11_2 = [atlas_2 textureNamed:@"death3.png"];
+    SKTexture *temp12_2 = [atlas_2 textureNamed:@"death4.png"];
+    SKTexture *temp13_2 = [atlas_2 textureNamed:@"death5.png"];
+    SKTexture *temp14_2 = [atlas_2 textureNamed:@"death6.png"];
+    SKTexture *temp15_2 = [atlas_2 textureNamed:@"death7.png"];
+    SKTexture *temp16_2 = [atlas_2 textureNamed:@"death8.png"];
+    SKTexture *temp17_2 = [atlas_2 textureNamed:@"death1.png"];
+    SKTexture *temp18_2 = [atlas_2 textureNamed:@"death2.png"];
+    SKTexture *temp19_2 = [atlas_2 textureNamed:@"death3.png"];
+    SKTexture *temp20_2 = [atlas_2 textureNamed:@"death4.png"];
+    SKTexture *temp21_2 = [atlas_2 textureNamed:@"death5.png"];
+    SKTexture *temp22_2 = [atlas_2 textureNamed:@"death6.png"];
+    SKTexture *temp23_2 = [atlas_2 textureNamed:@"death7.png"];
+    SKTexture *temp24_2 = [atlas_2 textureNamed:@"death8.png"];
+    SKTexture *temp25_2 = [atlas_2 textureNamed:@"death1.png"];
+    SKTexture *temp26_2 = [atlas_2 textureNamed:@"death2.png"];
+    SKTexture *temp27_2 = [atlas_2 textureNamed:@"death3.png"];
+    SKTexture *temp28_2 = [atlas_2 textureNamed:@"death4.png"];
+    NSArray *heroArray_2=@[temp1_2,temp2_2,temp3_2,temp4_2,temp5_2,temp6_2,temp7_2,temp8_2,temp9_2,temp10_2,temp11_2,temp12_2,temp13_2,temp14_2,temp15_2,temp16_2,temp17_2,temp18_2,temp19_2,temp20_2,temp21_2,temp22_2,temp23_2,temp24_2,temp25_2,temp26_2,temp27_2,temp28_2];
+    SKAction *tempAction_2=[SKAction animateWithTextures:heroArray_2 timePerFrame:0.1];
+    int x = arc4random() % 10;
+    if (x<4) {
+        [hull runAction:[SKAction repeatActionForever:tempAction_2]];
+    }else{
+        [hull runAction:[SKAction repeatActionForever:tempAction]];
+    }
     
     gameOverView=[[SKSpriteNode alloc]initWithColor:[SKColor colorWithRed:0 green:0 blue:0 alpha:0.8] size:CGSizeMake(320, 320)];
     gameOverView.texture=[SKTexture textureWithImageNamed:@"gameover.png"];
@@ -574,7 +623,9 @@ static inline CGFloat skRand(CGFloat low, CGFloat high) {
     [retryButton setBackgroundImage:[UIImage imageNamed:@"button_h.png"] forState:UIControlStateHighlighted];
     [self.view addSubview:retryButton];
     [retryButton addTarget:self action:@selector(retryButton) forControlEvents:UIControlEventTouchUpInside];
-
+    if (self.view.bounds.size.height>500) {
+        retryButton.frame=CGRectMake(135, 340, 50, 50);
+    }
 }
 
 - (void)retryButton{
@@ -608,15 +659,16 @@ static inline CGFloat skRand(CGFloat low, CGFloat high) {
     SKTransition *doors=[SKTransition doorsCloseVerticalWithDuration:0.5];
     [self.view presentScene:spaceshipScene transition:doors];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"nameHide"object:@"HideNo"];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"adShow"object:@"adHide"];
 }
-- (void)backButton{
-    [retryButton removeFromSuperview];
-    [backButton removeFromSuperview];
-    SKScene *spaceshipScene=[[MyScene alloc]initWithSize:self.size];
-    SKTransition *doors=[SKTransition doorsCloseVerticalWithDuration:0.5];
-    [self.view presentScene:spaceshipScene transition:doors];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"nameHide"object:@"HideNo"];
-}
+//- (void)backButton{
+//    [retryButton removeFromSuperview];
+//    [backButton removeFromSuperview];
+//    SKScene *spaceshipScene=[[MyScene alloc]initWithSize:self.size];
+//    SKTransition *doors=[SKTransition doorsCloseVerticalWithDuration:0.5];
+//    [self.view presentScene:spaceshipScene transition:doors];
+//    [[NSNotificationCenter defaultCenter] postNotificationName:@"nameHide"object:@"HideNo"];
+//}
 
 - (void)pause:(NSNotification*)notification{
     id obj = [notification object];
@@ -627,5 +679,6 @@ static inline CGFloat skRand(CGFloat low, CGFloat high) {
         isPaused=1;
     }
 }
+
 
 @end

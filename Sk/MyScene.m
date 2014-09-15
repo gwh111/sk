@@ -65,7 +65,7 @@
         startLabel.physicsBody=[SKPhysicsBody bodyWithRectangleOfSize:CGSizeMake(80, 50)];
         
         SKSpriteNode *rateSpriteNode=[SKSpriteNode spriteNodeWithColor:[SKColor redColor] size:CGSizeMake(58, 50)];
-        rateSpriteNode.position=CGPointMake(25, 25);
+        rateSpriteNode.position=CGPointMake(29, 25);
         [self addChild:rateSpriteNode];
         atlas = [SKTextureAtlas atlasNamed:@"rate"];
         temp1 = [atlas textureNamed:@"rate1.png"];
@@ -133,6 +133,13 @@
 }
 
 - (void)didMoveToView:(SKView *)view{
+//    NSString *musicPath = [[NSBundle mainBundle] pathForResource:@"之歌"
+//                                                          ofType:@"MP3"];
+//    NSURL *musicURL = [NSURL fileURLWithPath:musicPath];
+//    AVAudioPlayer *audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:musicURL
+//                                                        error:nil];
+//    [audioPlayer setDelegate:self];
+    
     
 }
 
